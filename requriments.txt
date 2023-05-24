@@ -1,0 +1,8 @@
+requriments.txt
+
+install the following pip libraries
+1.Tensorflow
+2.streamlit
+3.sckit-learn
+4.imblear
+5.pil
