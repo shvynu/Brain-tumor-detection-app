@@ -5,7 +5,7 @@ from tensorflow.keras.preprocessing import image
 from tensorflow.keras.models import load_model
 
 # Load the trained model
-model = load_model('C:/Users/Rinku/Desktop/Gdrive/Brain-Tumor-Detection-master/brain_tumor.h5')
+model = load_model('main.h5')
 
 def predict_tumor(image_path):
     # Load and preprocess the image
