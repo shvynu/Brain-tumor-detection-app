@@ -3,9 +3,21 @@ import numpy as np
 from PIL import Image
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.models import load_model
+import requests
+from io import BytesIO
 
-# Load the trained model
-model = load_model('main.h5')
+# Function to load the model from GitHub
+def load_model_from_github(url):
+    response = requests.get(url)
+    model_file = BytesIO(response.content)
+    model = load_model(model_file)
+    return model
+
+# URL of the model file in your GitHub repository
+model_url = 'https://github.com/shvynu/Brain-tumor-detection-app/raw/main/main.h5'
+
+# Load the trained model from GitHub
+model = load_model_from_github(model_url)
 
 def predict_tumor(image_path):
     # Load and preprocess the image
@@ -19,22 +31,26 @@ def predict_tumor(image_path):
 
     return result
 
-# Streamlit app
-st.title('Brain Tumor Detection')
+def main():
+    # Streamlit app
+    st.title('Brain Tumor Detection')
 
-# File uploader
-uploaded_file = st.file_uploader('Upload an image', type=['jpg', 'jpeg'])
+    # File uploader
+    uploaded_file = st.file_uploader('Upload an image', type=['jpg', 'jpeg'])
 
-if uploaded_file is not None:
-    # Display the uploaded image
-    image_display = Image.open(uploaded_file)
-    st.image(image_display, caption='Uploaded Image', use_column_width=True)
+    if uploaded_file is not None:
+        # Display the uploaded image
+        image_display = Image.open(uploaded_file)
+        st.image(image_display, caption='Uploaded Image', use_column_width=True)
 
-    # Make prediction
-    result = predict_tumor(uploaded_file)
+        # Make prediction
+        result = predict_tumor(uploaded_file)
 
-    # Display the result
-    if result[0] <= 0.5:
-        st.write('No Brain Tumor')
-    else:
-        st.write('Brain Tumor')
+        # Display the result
+        if result[0] <= 0.5:
+            st.write('No Brain Tumor')
+        else:
+            st.write('Brain Tumor')
+
+if __name__ == '__main__':
+    main()
